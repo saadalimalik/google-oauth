@@ -5,10 +5,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import routes from './routes/index';
+import { connectToMongoDB } from './services/db';
 
 const app = express();
 
-const PORT = 3000;
+connectToMongoDB();
 
 app.get('/', (req: Request, res: Response) => {
   res.send({ msg: 'Welcome to the backend;' });
@@ -16,6 +17,6 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use(routes);
 
-app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`Server is listening on port ${process.env.PORT || 3000}`);
 });
