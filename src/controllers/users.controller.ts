@@ -1,7 +1,7 @@
 import { Request, Response } from 'express-serve-static-core';
 import { CreateUserDTO } from '../dtos/CreateUser.dto';
-import { CreateUserQueryParams } from '../types/query-params';
-import { User } from '../types/response';
+import { CreateUserQueryParams } from '../interfaces/query-params';
+import { User } from '../interfaces/response';
 
 export const getUsers = (request: Request, response: Response) => {
   response.send([]);
