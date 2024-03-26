@@ -24,39 +24,21 @@ export const googleLogin = async (req: Request, res: Response) => {
     const { id_token, access_token } = await getGoogleUserTokens({ code });
     // Using the received tokens, get the associated google user
     const googleUser = await getGoogleUser({ id_token, access_token });
-    // Check if user is already registered in the database
-    const userAlreadyExist = await GoogleUser.findOne({
-      email: googleUser.email,
-    });
-    // Send the same user back if it already exists
-    if (userAlreadyExist)
-      return res.status(200).send({
-        msg: `User is already registered on email: ${userAlreadyExist.email}`,
-        user: userAlreadyExist,
-      });
-    // Upsert the user (Update if it exists, create one if it does not)
-    // const user = GoogleUser.findOneAndUpdate(
-    //   { email: googleUser.email },
-    //   {
-    //     id: googleUser.id,
-    //     name: googleUser.name,
-    //     email: googleUser.email,
-    //     picture: googleUser.picture,
-    //   },
-    //   { upsert: true, new: true }
-    // );
-
+    // If the user's email is not verified, send them back
     if (!googleUser.verified_email)
       return res.status(400).send({ msg: 'User email is not verified' });
 
-    const user = new GoogleUser({
-      id: googleUser.id,
-      name: googleUser.name,
-      email: googleUser.email,
-      picture: googleUser.picture,
-    });
-
-    await user.save();
+    // Upsert the user (Update if it exists, create one if it does not)
+    const user = await GoogleUser.findOneAndUpdate(
+      { email: googleUser.email },
+      {
+        id: googleUser.id,
+        name: googleUser.name,
+        email: googleUser.email,
+        picture: googleUser.picture,
+      },
+      { upsert: true, new: true }
+    );
 
     return res.status(201).send({ msg: 'User logged in successfully', user });
   } catch (error: any) {

@@ -33,18 +33,23 @@ export const deleteAllUsers = async (req: Request, res: Response) => {
   }
 };
 
-export const getGoogleUsers = async (req: Request, res: Response) => {
-  const users = await GoogleUser.find({});
+export const getGoogleUsers = async (req: Request, res: Response) => {};
 
-  res.send(users);
-};
-
+// Delete all the google users
 export const deleteAllGoogleUsers = async (req: Request, res: Response) => {
   try {
     const result = await GoogleUser.deleteMany({});
-    res
-      .status(200)
-      .send({ msg: `${result.deletedCount} users deleted successfully` });
+
+    // Response if there were users to be deleted
+    if (result.deletedCount) {
+      return res.status(200).send({
+        msg: `${result.deletedCount} user${
+          result.deletedCount > 1 && 's'
+        } deleted successfully`,
+      });
+    }
+
+    return res.status(200).send({ msg: 'No user exist to be deleted.' });
   } catch (error) {
     console.log(error);
   }
