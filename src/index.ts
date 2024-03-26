@@ -15,6 +15,8 @@ app.get('/', (req: Request, res: Response) => {
   res.send({ msg: 'Welcome to the backend;' });
 });
 
+// Middlewares
+app.use(express.json());
 app.use(routes);
 
 app.listen(process.env.PORT || 3000, () => {

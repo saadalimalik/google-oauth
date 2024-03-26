@@ -5,7 +5,6 @@ import {
   getGoogleUser,
   getGoogleUserTokens,
 } from '../utils/auth.util';
-import User from '../models/user.model';
 import GoogleUser from '../models/googleUser.model';
 
 export const googleAuth = (req: Request, res: Response) => {
