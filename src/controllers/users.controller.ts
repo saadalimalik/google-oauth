@@ -81,7 +81,7 @@ export const deleteAllGoogleUsers = async (req: Request, res: Response) => {
     if (result.deletedCount) {
       return res.status(200).send({
         msg: `${result.deletedCount} user${
-          result.deletedCount > 1 && 's'
+          result.deletedCount > 1 ? 's' : ''
         } deleted successfully`,
       });
     }

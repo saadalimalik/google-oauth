@@ -1,5 +1,6 @@
-import express from 'express';
 import { Request, Response } from 'express-serve-static-core';
+import express from 'express';
+import cookieParser from 'cookie-parser';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -17,6 +18,7 @@ app.get('/', (req: Request, res: Response) => {
 
 // Middlewares
 app.use(express.json());
+app.use(cookieParser());
 app.use(routes);
 
 app.listen(process.env.PORT || 3000, () => {
