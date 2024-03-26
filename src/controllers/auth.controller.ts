@@ -1,5 +1,6 @@
 import { Request, Response } from 'express-serve-static-core';
 
+import jwt from 'jsonwebtoken';
 import {
   getGoogleAuthURL,
   getGoogleUser,
@@ -39,7 +40,17 @@ export const googleLogin = async (req: Request, res: Response) => {
       { upsert: true, new: true }
     );
 
-    return res.status(201).send({ msg: 'User logged in successfully', user });
+    // Create access and refresh tokens
+    const accessToken = jwt.sign(user.toJSON(), process.env.JWT_SECRET || '', {
+      expiresIn: 60000 * 15,
+    }); // 15 Minutes
+    const refreshToken = jwt.sign(user.toJSON(), process.env.JWT_SECRET || '', {
+      expiresIn: 60000 * 60 * 24,
+    }); // 1 day
+
+    return res
+      .status(200)
+      .send({ msg: 'User logged in successfully', accessToken, refreshToken });
   } catch (error: any) {
     console.log(error);
   }
