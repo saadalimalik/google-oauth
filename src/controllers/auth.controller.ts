@@ -1,11 +1,14 @@
 import { Request, Response } from 'express-serve-static-core';
 
 import jwt from 'jsonwebtoken';
+import crypto from 'node:crypto';
+
 import {
   getGoogleAuthURL,
   getGoogleUser,
   getGoogleUserTokens,
 } from '../utils/auth.util';
+
 import GoogleUser from '../models/googleUser.model';
 
 export const googleAuth = (req: Request, res: Response) => {
@@ -55,3 +58,13 @@ export const googleLogin = async (req: Request, res: Response) => {
     console.log(error);
   }
 };
+
+// Authentication for OTP
+// Generating and sending the OTP
+export const otpAuth = (req: Request, res: Response) => {
+  const { phone } = req.query;
+
+  // Generate OTP
+};
+// Verifying the OTP
+export const verifyOtp = (req: Request, res: Response) => {};
